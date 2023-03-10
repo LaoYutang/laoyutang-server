@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "github.com/laoyutang/laoyutang-server/modules/db"
 	"github.com/laoyutang/laoyutang-server/router"
 )
 
