@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "github.com/laoyutang/laoyutang-server/modules/db"
+	_ "github.com/laoyutang/laoyutang-server/modules/loger"
 	"github.com/laoyutang/laoyutang-server/router"
 )
 

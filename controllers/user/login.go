@@ -12,8 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var sql = db.GetDB()
-
+// 注册方法
 func SignIn(c *gin.Context) {
 	type signForm struct {
 		UserName        string `json:"userName" required:"true" label:"用户名"`
@@ -41,7 +40,7 @@ func SignIn(c *gin.Context) {
 
 	// 判断用户是否存在
 	var count int64
-	sql.Model(&structs.User{}).Where("user_name = ?", form.UserName).Count(&count)
+	db.Sql.Model(&structs.User{}).Where("user_name = ?", form.UserName).Count(&count)
 	if count > 0 {
 		c.JSON(http.StatusOK, &structs.Response{
 			Success: false,
@@ -66,7 +65,7 @@ func SignIn(c *gin.Context) {
 		},
 	}
 
-	result := sql.Create(user)
+	result := db.Sql.Create(user)
 	if result.Error != nil {
 		c.JSON(http.StatusOK, &structs.Response{
 			Success: false,
