@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/laoyutang/laoyutang-server/modules/db"
 	"github.com/laoyutang/laoyutang-server/modules/structs"
+	"github.com/laoyutang/laoyutang-server/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -15,12 +16,18 @@ var sql = db.GetDB()
 
 func SignIn(c *gin.Context) {
 	type signForm struct {
-		UserName        string `json:"userName"`
-		Password        string `json:"password"`
-		ConfirmPassword string `json:"confirmPassword"`
+		UserName        string `json:"userName" required:"true" label:"用户名"`
+		Password        string `json:"password" required:"true" label:"密码"`
+		ConfirmPassword string `json:"confirmPassword" required:"true" label:"确认密码"`
 	}
 	form := &signForm{}
 	c.BindJSON(form)
+
+	// 判断必填项
+	hasNull := utils.ValRequiredAndResponse(form, c)
+	if hasNull != nil {
+		return
+	}
 
 	// 判断密码是否一致
 	if form.Password != form.ConfirmPassword {
