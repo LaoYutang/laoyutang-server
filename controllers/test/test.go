@@ -1,15 +1,18 @@
 package test
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/laoyutang/laoyutang-server/modules/structs"
+	"github.com/sirupsen/logrus"
 )
 
 func Test(c *gin.Context) {
-	log.Println("test")
+	test := map[string]interface{}{
+		"a": 1,
+	}
+	logrus.Debug(test)
 
 	res := &structs.Response{
 		Success: true,
