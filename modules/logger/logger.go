@@ -1,4 +1,4 @@
-package loger
+package logger
 
 import (
 	"io"
@@ -27,5 +27,5 @@ func init() {
 	logrus.SetOutput(io.MultiWriter(os.Stdout, logFile))
 	logrus.SetLevel(logrus.TraceLevel)
 	logrus.SetFormatter(&logrus.JSONFormatter{TimestampFormat: "2006-01-02 15:04:05", PrettyPrint: true})
-	logrus.SetReportCaller(true)
+	logrus.SetReportCaller(false)
 }
