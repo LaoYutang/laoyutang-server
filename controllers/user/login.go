@@ -20,7 +20,7 @@ func SignIn(c *gin.Context) {
 		ConfirmPassword string `json:"confirmPassword" required:"true" label:"确认密码"`
 	}
 	form := &signForm{}
-	c.BindJSON(form)
+	c.ShouldBind(form)
 
 	// 判断必填项
 	hasNull := utils.ValRequiredAndResponse(form, c)
