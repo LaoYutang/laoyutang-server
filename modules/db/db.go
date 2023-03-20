@@ -12,7 +12,7 @@ var Sql *gorm.DB
 
 func init() {
 	// 获取连接串
-	dsn := os.Getenv("LAOYUTANG_SQL")
+	dsn := os.Getenv("LAOYUTANG_SQL") + "?parseTime=true"
 
 	var err error
 	Sql, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})

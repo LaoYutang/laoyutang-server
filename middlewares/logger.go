@@ -16,7 +16,7 @@ func Logger() gin.HandlerFunc {
 			"Path":  c.Request.URL.Path,
 			"Query": c.Request.URL.RawQuery,
 			"Body":  string(body),
-		}).Info("")
+		}).Info("Request")
 		c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
 		c.Next()
 	}
