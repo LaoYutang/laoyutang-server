@@ -26,6 +26,6 @@ func init() {
 	// 设置logrus
 	logrus.SetOutput(io.MultiWriter(os.Stdout, logFile))
 	logrus.SetLevel(logrus.TraceLevel)
-	logrus.SetFormatter(&logrus.JSONFormatter{TimestampFormat: "2006-01-02 15:04:05", PrettyPrint: true})
+	logrus.SetFormatter(&logrus.TextFormatter{TimestampFormat: "2006-01-02 15:04:05"})
 	logrus.SetReportCaller(false)
 }

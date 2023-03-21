@@ -10,7 +10,7 @@ import (
 
 var Sql *gorm.DB
 
-func init() {
+func initMySql() {
 	// 获取连接串
 	dsn := os.Getenv("LAOYUTANG_SQL") + "?parseTime=true"
 
@@ -18,10 +18,10 @@ func init() {
 	Sql, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		panic(">>> connect database failed, error=" + err.Error())
+		panic(">>> connect mysql failed, error=" + err.Error())
 	}
 
-	fmt.Println(">>> connect database success")
+	fmt.Println(">>> connect mysql success")
 	// 设置数据库连接池参数
 	sqlDB, _ := Sql.DB()
 	// 设置数据库连接池最大连接数
