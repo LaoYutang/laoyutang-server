@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/laoyutang/laoyutang-server/modules/structs"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -28,4 +29,10 @@ func initMySql() {
 	sqlDB.SetMaxOpenConns(100)
 	// 连接池最大允许的空闲连接数
 	sqlDB.SetMaxIdleConns(10)
+
+	// 建表
+	migrateErr := Sql.AutoMigrate(&structs.User{}, &structs.Menu{})
+	if migrateErr != nil {
+		panic(">>> mysql migrate failed, error=" + migrateErr.Error())
+	}
 }
