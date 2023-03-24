@@ -31,7 +31,7 @@ func initMySql() {
 	sqlDB.SetMaxIdleConns(10)
 
 	// 建表
-	migrateErr := Sql.AutoMigrate(&structs.User{}, &structs.Menu{})
+	migrateErr := Sql.AutoMigrate(&structs.User{}, &structs.Menu{}, &structs.Role{})
 	if migrateErr != nil {
 		panic(">>> mysql migrate failed, error=" + migrateErr.Error())
 	}
