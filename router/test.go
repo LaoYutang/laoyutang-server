@@ -2,11 +2,10 @@ package router
 
 import (
 	"github.com/laoyutang/laoyutang-server/controllers/test"
-	"github.com/laoyutang/laoyutang-server/middlewares"
 )
 
 func initTestRouter() {
-	testRouter := Router.Group("/test").Use(middlewares.LoginAuth())
+	testRouter := Router.Group("/test")
 	{
 		testRouter.Any("/ok", test.Test)
 	}

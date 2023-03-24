@@ -6,13 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/laoyutang/laoyutang-server/modules/structs"
 	"github.com/laoyutang/laoyutang-server/utils"
-	"github.com/sirupsen/logrus"
 )
 
 func Test(c *gin.Context) {
-	user := c.MustGet("UserName")
-
-	logrus.Debug(utils.ToJson(user))
+	type test struct {
+		A string `json:"a"`
+	}
+	str := test{}
+	utils.ParseJson("{\"a\":\"sdfsdf胜多负少\"}", &str)
 
 	res := &structs.Response{
 		Success: true,
