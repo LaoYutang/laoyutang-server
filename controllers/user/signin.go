@@ -1,8 +1,6 @@
 package user
 
 import (
-	"time"
-
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/laoyutang/laoyutang-server/modules/db"
@@ -54,9 +52,7 @@ func SignIn(c *gin.Context) {
 		UserName: form.UserName,
 		Password: string(encryptPassword),
 		Model: structs.Model{
-			CreatedAt: time.Now(),
 			CreatedBy: "sys",
-			UpdatedAt: time.Now(),
 			UpdatedBy: "sys",
 		},
 	}
