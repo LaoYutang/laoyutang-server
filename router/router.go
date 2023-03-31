@@ -14,5 +14,5 @@ func init() {
 
 	// 初始化路由组
 	initTestRouter()
-	initUserRouter()
+	initAdminRouter()
 }

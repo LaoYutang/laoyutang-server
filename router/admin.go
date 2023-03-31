@@ -5,8 +5,10 @@ import (
 	"github.com/laoyutang/laoyutang-server/middlewares"
 )
 
-func initUserRouter() {
-	userRouter := Router.Group("/user")
+func initAdminRouter() {
+	adminRouter := Router.Group("/admin")
+
+	userRouter := adminRouter.Group("/user")
 	{
 		userRouter.POST("/sign-in", user.SignIn)
 		userRouter.POST("/login", user.Login)
