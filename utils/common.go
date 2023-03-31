@@ -27,3 +27,15 @@ func ParseJson(jsonStr string, target any) error {
 	}
 	return nil
 }
+
+// 切片去重方法
+func RemoveDup(arr []any) (res []any) {
+	tmp := map[any]bool{}
+	for _, v := range arr {
+		if _, ok := tmp[v]; !ok {
+			tmp[v] = true
+			res = append(res, v)
+		}
+	}
+	return res
+}
