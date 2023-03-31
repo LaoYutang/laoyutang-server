@@ -9,9 +9,8 @@ func initAdminRouter() {
 	adminRouter := Router.Group("/admin")
 
 	userRouter := adminRouter.Group("/user")
+	userRouter.Use(middlewares.LoginAuth())
 	{
-		userRouter.POST("/sign-in", user.SignIn)
-		userRouter.POST("/login", user.Login)
-		userRouter.POST("/get-menus", user.GetMenus).Use(middlewares.LoginAuth())
+		userRouter.POST("/get-menus", user.GetMenus)
 	}
 }
