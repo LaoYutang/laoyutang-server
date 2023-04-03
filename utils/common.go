@@ -39,3 +39,20 @@ func RemoveDup(arr []any) (res []any) {
 	}
 	return res
 }
+
+type dupCustomNode interface {
+	GetValue() string
+}
+
+// 自定义节点切片去重方法
+func RemoveDupCustom(arr []dupCustomNode) (res []dupCustomNode) {
+	tmp := map[string]bool{}
+	for _, v := range arr {
+		val := v.GetValue()
+		if _, ok := tmp[val]; !ok {
+			tmp[val] = true
+			res = append(res, v)
+		}
+	}
+	return res
+}
