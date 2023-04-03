@@ -29,7 +29,7 @@ func ParseJson(jsonStr string, target any) error {
 }
 
 // 切片去重方法
-func RemoveDup(arr []any) (res []any) {
+func RemoveDup[T any](arr []T) (res []T) {
 	tmp := map[any]bool{}
 	for _, v := range arr {
 		if _, ok := tmp[v]; !ok {
@@ -41,7 +41,7 @@ func RemoveDup(arr []any) (res []any) {
 }
 
 // 自定义节点切片去重方法
-func RemoveDupCustom(arr []any, getValue func(any) any) (res []any) {
+func RemoveDupCustom[T any](arr []T, getValue func(T) any) (res []T) {
 	tmp := map[any]bool{}
 	for _, v := range arr {
 		val := getValue(v)

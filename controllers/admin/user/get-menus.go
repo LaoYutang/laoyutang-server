@@ -34,11 +34,9 @@ func GetMenus(c *gin.Context) {
 		return
 	}
 
-	menuIds := []any{}
+	menuIds := []string{}
 	for _, role := range *roles {
-		for _, v := range strings.Split(role.Menus, ",") {
-			menuIds = append(menuIds, v)
-		}
+		menuIds = append(menuIds, strings.Split(role.Menus, ",")...)
 	}
 	menuIds = utils.RemoveDup(menuIds)
 
