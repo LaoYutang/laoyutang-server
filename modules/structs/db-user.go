@@ -12,3 +12,11 @@ type User struct {
 func (u User) TableName() string {
 	return "user_info"
 }
+
+type UserApi struct {
+	Model
+	UserName string `json:"userName"`
+	RoleIds  string `json:"roleIds"`
+	Email    string `json:"email"`
+	Phone    string `json:"phone"`
+}

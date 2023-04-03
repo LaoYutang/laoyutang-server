@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"net/http"
 	"os"
 
 	"github.com/dgrijalva/jwt-go"
@@ -14,7 +15,7 @@ func LoginAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.Request.Header.Get("Authorization")
 		if authHeader == "" {
-			utils.ResponseFail(c, 401, "登录失效，请重新登录")
+			utils.ResponseFail(c, http.StatusUnauthorized, "登录失效，请重新登录")
 			c.Abort()
 			return
 		}
@@ -25,7 +26,7 @@ func LoginAuth() gin.HandlerFunc {
 		})
 		if parseErr != nil {
 			logrus.Error("token parse error", parseErr)
-			utils.ResponseFail(c, 401, "登录失效，请重新登录")
+			utils.ResponseFail(c, http.StatusUnauthorized, "登录失效，请重新登录")
 			c.Abort()
 			return
 		}
@@ -34,7 +35,7 @@ func LoginAuth() gin.HandlerFunc {
 		claims, ok := token.Claims.(*structs.Claims)
 		if !(ok && token.Valid) {
 			logrus.Error("token parse error", parseErr)
-			utils.ResponseFail(c, 401, "登录失效，请重新登录")
+			utils.ResponseFail(c, http.StatusUnauthorized, "登录失效，请重新登录")
 			c.Abort()
 			return
 		}

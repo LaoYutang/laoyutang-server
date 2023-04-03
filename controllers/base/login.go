@@ -2,6 +2,7 @@ package base
 
 import (
 	"errors"
+	"net/http"
 	"os"
 	"time"
 
@@ -29,7 +30,7 @@ func Login(c *gin.Context) {
 	// 字段校验
 	vadErr := validator.New().Struct(form)
 	if vadErr != nil {
-		utils.ResponseFail(c, 400, vadErr.Error())
+		utils.ResponseFail(c, http.StatusBadRequest, vadErr.Error())
 		return
 	}
 
@@ -37,7 +38,7 @@ func Login(c *gin.Context) {
 	user := &structs.User{}
 	if err := db.Sql.Where("user_name = ?", form.UserName).First(user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			utils.ResponseFail(c, 400, "用户未注册或密码不正确")
+			utils.ResponseFail(c, http.StatusBadRequest, "用户未注册或密码不正确")
 		} else {
 			logrus.Error(err)
 			utils.ResponseFailDefault(c)
@@ -47,7 +48,7 @@ func Login(c *gin.Context) {
 
 	// 校验密码
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(form.Password)); err != nil {
-		utils.ResponseFail(c, 400, "用户未注册或密码不正确")
+		utils.ResponseFail(c, http.StatusBadRequest, "用户未注册或密码不正确")
 		return
 	}
 
@@ -68,7 +69,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	utils.ResponseSuccess(c, &gin.H{
+	utils.ResponseSuccess(c, &structs.H{
 		"token": token,
 	})
 }

@@ -51,5 +51,5 @@ func GetMenus(c *gin.Context) {
 		return node.Id, node.Pid
 	})
 
-	utils.ResponseSuccess(c, tree)
+	utils.ResponseSuccess(c, &tree)
 }

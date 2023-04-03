@@ -11,6 +11,7 @@ func initAdminRouter() {
 	userRouter := adminRouter.Group("/user")
 	userRouter.Use(middlewares.LoginAuth())
 	{
+		userRouter.GET("", user.Read)
 		userRouter.POST("/get-menus", user.GetMenus)
 	}
 }

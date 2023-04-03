@@ -1,6 +1,8 @@
 package base
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/laoyutang/laoyutang-server/modules/db"
@@ -24,7 +26,7 @@ func SignIn(c *gin.Context) {
 	// 字段校验
 	vadErr := validator.New().Struct(form)
 	if vadErr != nil {
-		utils.ResponseFail(c, 400, vadErr.Error())
+		utils.ResponseFail(c, http.StatusBadRequest, vadErr.Error())
 		return
 	}
 
@@ -36,7 +38,7 @@ func SignIn(c *gin.Context) {
 		utils.ResponseFailDefault(c)
 		return
 	} else if count > 0 {
-		utils.ResponseFail(c, 400, "用户名已存在")
+		utils.ResponseFail(c, http.StatusBadRequest, "用户名已存在")
 		return
 	}
 
@@ -64,7 +66,7 @@ func SignIn(c *gin.Context) {
 		return
 	}
 
-	utils.ResponseSuccess(c, &gin.H{
+	utils.ResponseSuccess(c, &structs.H{
 		"id": user.Id,
 	})
 }
