@@ -52,3 +52,40 @@ func RemoveDupCustom(arr []any, getValue func(any) any) (res []any) {
 	}
 	return res
 }
+
+type treeNode struct {
+	id       any
+	pid      any
+	children *[]treeNode
+	data     any
+}
+
+// list生成树方法
+func GenerateTree(list []any, getAttr func(any) (id any, pid any)) (res []treeNode) {
+	childrenMap := map[any]*[]treeNode{}
+
+	for _, val := range list {
+		id, pid := getAttr(val)
+		node := &treeNode{
+			id:       id,
+			pid:      pid,
+			children: &[]treeNode{},
+			data:     val,
+		}
+
+		if _, ok := childrenMap[pid]; !ok {
+			childrenMap[pid] = &[]treeNode{}
+		}
+		if _, ok := childrenMap[id]; !ok {
+			childrenMap[id] = node.children
+		}
+
+		*childrenMap[pid] = append(*childrenMap[pid], *node)
+
+		if pid == 0 || pid == "0" || pid == nil {
+			res = append(res, *node)
+		}
+	}
+
+	return res
+}
