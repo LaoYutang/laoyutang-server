@@ -34,5 +34,24 @@ func GetMenus(c *gin.Context) {
 		return
 	}
 
-	logrus.Debug(utils.ToJson(roles))
+	menuIds := []any{}
+	for _, role := range *roles {
+		for _, v := range strings.Split(role.Menus, ",") {
+			menuIds = append(menuIds, v)
+		}
+	}
+	menuIds = utils.RemoveDup(menuIds)
+
+	menus := &[]structs.Menu{}
+	if err := db.Sql.Find(menus, menuIds).Error; err != nil {
+		logrus.Error(err)
+		utils.ResponseFailDefault(c)
+		return
+	}
+
+	tree := utils.GenerateTree(*menus, func(node structs.Menu) (any, any) {
+		return node.Id, node.Pid
+	})
+
+	utils.ResponseSuccess(c, tree)
 }
