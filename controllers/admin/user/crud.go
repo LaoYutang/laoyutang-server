@@ -17,7 +17,6 @@ func Read(c *gin.Context) {
 		structs.Pager
 	}
 	form := &Form{}
-	logrus.Error(c.Query("userName"))
 	c.ShouldBind(form)
 
 	// 字段校验
