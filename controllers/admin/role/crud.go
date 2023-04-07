@@ -1,6 +1,7 @@
 package role
 
 import (
+	"context"
 	"net/http"
 	"time"
 
@@ -79,6 +80,9 @@ func Update(c *gin.Context) {
 		utils.ResponseFailDefault(c)
 		return
 	}
+
+	ctx := context.Background()
+	db.Redis.Do(ctx, "keys", "user_perm_*")
 
 	utils.ResponseSuccess(c, nil)
 }

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/laoyutang/laoyutang-server/modules/db"
@@ -107,23 +106,32 @@ func GetUserPermsFromSql(userId int) (list []string, errOut error) {
 }
 
 // 获取用户权限缓存
-func GetUserPerms(userId int) (list []string, errOut error) {
+func GetUserPerms(userId int) ([]string, error) {
 	var err error
+	var list []string
 	ctx := context.Background()
-	resStr, err := db.Redis.Get(ctx, fmt.Sprintf("user_perm_%v", userId)).Result()
+	resStr, err := db.Redis.Get(ctx, "user_perm").Result()
 	if err == redis.Nil {
+		resStr = "{}"
+	} else if err != nil {
+		return nil, err
+	}
+
+	res := map[int][]string{}
+	err = utils.ParseJson(resStr, &res)
+	if err != nil {
+		return nil, err
+	}
+
+	ok := false
+	if list, ok = res[userId]; !ok {
 		list, err = GetUserPermsFromSql(userId)
 		if err != nil {
 			return nil, err
 		}
-		db.Redis.Set(ctx, fmt.Sprintf("user_perm_%v", userId), utils.ToJson(list), time.Hour*2)
-		return
-	} else if err != nil {
-		return nil, err
+		res[userId] = list
+		db.Redis.Set(ctx, "user_perm", utils.ToJson(res), 0)
 	}
-	err = utils.ParseJson(resStr, &list)
-	if err != nil {
-		return nil, err
-	}
-	return
+
+	return list, nil
 }
