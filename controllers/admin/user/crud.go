@@ -28,7 +28,7 @@ func Read(c *gin.Context) {
 
 	users := &[]structs.UserApi{}
 	offset, limit := (form.CurrentPage-1)*form.PageSize, form.PageSize
-	if err := db.Sql.Model(&structs.User{}).Where("user_name like ?", form.UserName+"%").Offset(offset).Limit(limit).Order("created_at desc").Find(users).Error; err != nil {
+	if err := db.Sql.Model(&structs.User{}).Where("user_name like ?", form.UserName+"%").Order("id desc").Offset(offset).Limit(limit).Find(users).Error; err != nil {
 		logrus.Error(err)
 		utils.ResponseFailDefault(c)
 		return

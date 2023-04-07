@@ -20,6 +20,9 @@ func initAdminRouter() {
 	roleRouter := adminRouter.Group("/role")
 	{
 		roleRouter.GET("", role.Read)
+		roleRouter.POST("", role.Create)
+		roleRouter.PUT("", role.Update)
+		roleRouter.DELETE("", role.Delete)
 	}
 
 	menuRouter := adminRouter.Group("/menu")
