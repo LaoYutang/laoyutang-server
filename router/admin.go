@@ -28,5 +28,8 @@ func initAdminRouter() {
 	menuRouter := adminRouter.Group("/menu")
 	{
 		menuRouter.GET("", menu.Read)
+		menuRouter.POST("", menu.Create)
+		menuRouter.PUT("", menu.Update)
+		menuRouter.DELETE("", menu.Delete)
 	}
 }

@@ -74,7 +74,7 @@ func Update(c *gin.Context) {
 		"Desc":      form.Desc,
 	}
 
-	if err := db.Sql.Model(&structs.Role{}).Where("id = ?", form.Id).Updates(role).Error; err != nil {
+	if err := db.Sql.Model(&structs.Role{}).Where(form.Id).Updates(role).Error; err != nil {
 		logrus.Error(err)
 		utils.ResponseFailDefault(c)
 		return
