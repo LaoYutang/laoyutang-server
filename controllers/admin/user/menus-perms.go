@@ -16,10 +16,10 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func GetMenus(c *gin.Context) {
+func GetMenusAndPerms(c *gin.Context) {
 	// 获取用户角色
 	user := &structs.User{}
-	if err := db.Sql.Where("id = ?", c.MustGet("UserId")).First(user).Error; err != nil {
+	if err := db.Sql.Where(c.MustGet("UserId")).First(user).Error; err != nil {
 		logrus.Error(err)
 		utils.ResponseFailDefault(c)
 		return
@@ -46,7 +46,7 @@ func GetMenus(c *gin.Context) {
 	menuIds = utils.RemoveDup(menuIds)
 
 	menus := &[]structs.Menu{}
-	if err := db.Sql.Find(menus, menuIds).Error; err != nil {
+	if err := db.Sql.Where("Type = 0").Find(menus, menuIds).Error; err != nil {
 		logrus.Error(err)
 		utils.ResponseFailDefault(c)
 		return
@@ -56,7 +56,21 @@ func GetMenus(c *gin.Context) {
 		return node.Id, node.Pid
 	})
 
-	utils.ResponseSuccess(c, &tree)
+	permList := &[]map[string]interface{}{}
+	if err := db.Sql.Model(&structs.Menu{}).Select("Sign").Where("Type = 1").Find(permList, menuIds).Error; err != nil {
+		logrus.Error(err)
+		utils.ResponseFailDefault(c)
+		return
+	}
+	perms := []string{}
+	for _, perm := range *permList {
+		perms = append(perms, perm["sign"].(string))
+	}
+
+	utils.ResponseSuccess(c, &structs.H{
+		"menus": &tree,
+		"perms": &perms,
+	})
 }
 
 // 从数据库中获取用户权限列表方法
