@@ -89,3 +89,13 @@ func GenerateTree[T any](list []T, getAttr func(T) (id any, pid any)) (res []tre
 
 	return res
 }
+
+// 判断元素是否在切片中
+func SliceIncludes[T any](slice []T, ele T) bool {
+	temp := map[any]bool{}
+	for i := range slice {
+		temp[slice[i]] = true
+	}
+	_, ok := temp[ele]
+	return ok
+}

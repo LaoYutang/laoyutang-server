@@ -20,7 +20,7 @@ func ResponseFail(c *gin.Context, errNo int, message string) {
 func ResponseFailDefault(c *gin.Context) {
 	c.JSON(http.StatusOK, &structs.Response{
 		Success: false,
-		ErrNo:   500,
+		ErrNo:   http.StatusInternalServerError,
 		Message: "服务器异常",
 	})
 }
