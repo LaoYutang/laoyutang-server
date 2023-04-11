@@ -1,7 +1,6 @@
 package role
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"time"
@@ -57,8 +56,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	ctx := context.Background()
-	db.Redis.Del(ctx, "roles")
+	DelRolesCache()
 
 	utils.ResponseSuccess(c, nil)
 }
@@ -85,8 +83,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	ctx := context.Background()
-	db.Redis.Del(ctx, "roles")
+	DelRolesCache()
 
 	utils.ResponseSuccess(c, nil)
 }
@@ -119,8 +116,8 @@ func Delete(c *gin.Context) {
 		utils.ResponseFailDefault(c)
 		return
 	}
-	ctx := context.Background()
-	db.Redis.Del(ctx, "roles")
+
+	DelRolesCache()
 
 	utils.ResponseSuccess(c, nil)
 }
