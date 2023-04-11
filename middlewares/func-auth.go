@@ -22,7 +22,7 @@ func FuncAuth(perm string) gin.HandlerFunc {
 		)
 
 		// 获取角色信息
-		if roles, err = role.GetRoles(); err != nil {
+		if roles, err = role.GetRolesMap(); err != nil {
 			logrus.Error(err)
 			utils.ResponseFailDefault(c)
 			c.Abort()
@@ -30,7 +30,7 @@ func FuncAuth(perm string) gin.HandlerFunc {
 		}
 
 		// 获取菜单信息
-		if menus, err = menu.GetMenus(); err != nil {
+		if menus, err = menu.GetMenusMap(); err != nil {
 			logrus.Error(err)
 			utils.ResponseFailDefault(c)
 			c.Abort()

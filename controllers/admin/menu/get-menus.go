@@ -1,28 +1,17 @@
 package menu
 
 import (
-	"context"
-
 	"github.com/laoyutang/laoyutang-server/modules/db"
 	"github.com/laoyutang/laoyutang-server/modules/structs"
 	"github.com/laoyutang/laoyutang-server/utils"
-	"github.com/redis/go-redis/v9"
 )
 
-func GetMenus() (res map[int]map[string]any, errOut error) {
-	ctx := context.Background()
-	var (
-		err    error
-		resStr string
-	)
-	menus := map[int]map[string]any{}
-
-	resStr, err = db.Redis.Get(ctx, "menus").Result()
-	if err == redis.Nil {
-		// 数据库读取并格式化
+func GetMenusMap() (res map[int]map[string]any, errOut error) {
+	getData := func() (menus map[int]map[string]any, err error) {
+		menus = map[int]map[string]any{}
 		menuStructs := &[]structs.Menu{}
-		if err = db.Sql.Find(menuStructs).Error; err != nil {
-			return nil, err
+		if errOut = db.Sql.Find(menuStructs).Error; errOut != nil {
+			return
 		}
 
 		for _, menu := range *menuStructs {
@@ -35,16 +24,19 @@ func GetMenus() (res map[int]map[string]any, errOut error) {
 			}
 		}
 
-		db.Redis.Set(ctx, "menus", utils.ToJson(menus), 0)
-	} else if err != nil {
-		return nil, err
-	} else {
-		// 解析json数据
-		err = utils.ParseJson(resStr, &menus)
-		if err != nil {
-			return nil, err
-		}
+		return
 	}
 
-	return menus, nil
+	return utils.UseRedis("menus", getData, 0)
 }
+
+// func GetList(c *gin.Context) {
+// 	menus, err := GetMenus()
+// 	if err != nil {
+// 		logrus.Error(err)
+// 		utils.ResponseFailDefault(c)
+// 		return
+// 	}
+
+// 	utils.ResponseSuccess(c, menus)
+// }
