@@ -2,6 +2,7 @@ package menu
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -96,6 +97,20 @@ func Update(c *gin.Context) {
 func Delete(c *gin.Context) {
 	ids := []int{}
 	c.ShouldBindJSON(&ids)
+
+	for _, id := range ids {
+		roles := &[]structs.Role{}
+		if err := db.Sql.Where("menus REGEXP ?", fmt.Sprintf("(^|,)%d(,|$)", id)).Find(roles).Error; err != nil {
+			logrus.Error(err)
+			utils.ResponseFailDefault(c)
+			return
+		}
+
+		if len(*roles) > 0 {
+			utils.ResponseFail(c, http.StatusBadRequest, "选择的菜单权限已经被角色使用！")
+			return
+		}
+	}
 
 	delData := &map[string]interface{}{
 		"DeletedAt": time.Now(),

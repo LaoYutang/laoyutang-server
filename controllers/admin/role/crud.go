@@ -2,6 +2,7 @@ package role
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -93,6 +94,20 @@ func Update(c *gin.Context) {
 func Delete(c *gin.Context) {
 	ids := []int{}
 	c.ShouldBindJSON(&ids)
+
+	for _, id := range ids {
+		users := &[]structs.User{}
+		if err := db.Sql.Where("role_ids REGEXP ?", fmt.Sprintf("(^|,)%d(,|$)", id)).Find(users).Error; err != nil {
+			logrus.Error(err)
+			utils.ResponseFailDefault(c)
+			return
+		}
+
+		if len(*users) > 0 {
+			utils.ResponseFail(c, http.StatusBadRequest, "选择的角色已经被用户使用！")
+			return
+		}
+	}
 
 	delData := &map[string]interface{}{
 		"DeletedAt": time.Now(),
