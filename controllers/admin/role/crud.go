@@ -56,6 +56,9 @@ func Create(c *gin.Context) {
 		return
 	}
 
+	ctx := context.Background()
+	db.Redis.Del(ctx, "roles")
+
 	utils.ResponseSuccess(c, nil)
 }
 
@@ -82,7 +85,7 @@ func Update(c *gin.Context) {
 	}
 
 	ctx := context.Background()
-	db.Redis.Do(ctx, "keys", "user_perm_*")
+	db.Redis.Del(ctx, "roles")
 
 	utils.ResponseSuccess(c, nil)
 }
@@ -101,6 +104,8 @@ func Delete(c *gin.Context) {
 		utils.ResponseFailDefault(c)
 		return
 	}
+	ctx := context.Background()
+	db.Redis.Del(ctx, "roles")
 
 	utils.ResponseSuccess(c, nil)
 }

@@ -1,6 +1,7 @@
 package menu
 
 import (
+	"context"
 	"net/http"
 	"time"
 
@@ -57,6 +58,9 @@ func Create(c *gin.Context) {
 		return
 	}
 
+	ctx := context.Background()
+	db.Redis.Del(ctx, "menus")
+
 	utils.ResponseSuccess(c, nil)
 }
 
@@ -83,6 +87,9 @@ func Update(c *gin.Context) {
 		return
 	}
 
+	ctx := context.Background()
+	db.Redis.Del(ctx, "menus")
+
 	utils.ResponseSuccess(c, nil)
 }
 
@@ -100,6 +107,9 @@ func Delete(c *gin.Context) {
 		utils.ResponseFailDefault(c)
 		return
 	}
+
+	ctx := context.Background()
+	db.Redis.Del(ctx, "menus")
 
 	utils.ResponseSuccess(c, nil)
 }
