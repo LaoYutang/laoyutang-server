@@ -42,6 +42,7 @@ func LoginAuth() gin.HandlerFunc {
 
 		c.Set("UserName", claims.UserName)
 		c.Set("UserId", claims.UserId)
+		c.Set("UserRoles", claims.UserRoles)
 		c.Next()
 	}
 }

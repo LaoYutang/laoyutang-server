@@ -2,9 +2,12 @@ package middlewares
 
 import (
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/laoyutang/laoyutang-server/controllers/admin/user"
+	"github.com/laoyutang/laoyutang-server/controllers/admin/menu"
+	"github.com/laoyutang/laoyutang-server/controllers/admin/role"
 	"github.com/laoyutang/laoyutang-server/utils"
 	"github.com/sirupsen/logrus"
 )
@@ -13,27 +16,55 @@ import (
 // perm 权限字符串Sign
 func FuncAuth(perm string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userId := c.MustGet("UserId").(int)
-		if userId == 0 {
-			utils.ResponseFail(c, http.StatusUnauthorized, "登录失效，请重新登录")
-			c.Abort()
-			return
-		}
+		var (
+			roles, menus map[int]map[string]any
+			err          error
+		)
 
-		permList, err := user.GetUserPerms(userId)
-		if err != nil {
-			logrus.Error("GetUserPerms Error:" + err.Error())
+		// 获取角色信息
+		if roles, err = role.GetRoles(); err != nil {
+			logrus.Error(err)
 			utils.ResponseFailDefault(c)
 			c.Abort()
 			return
 		}
 
-		if !utils.SliceIncludes(permList, perm) {
-			utils.ResponseFail(c, http.StatusForbidden, "Forbidden!")
+		// 获取菜单信息
+		if menus, err = menu.GetMenus(); err != nil {
+			logrus.Error(err)
+			utils.ResponseFailDefault(c)
 			c.Abort()
 			return
 		}
 
-		c.Next()
+		for _, roleId := range strings.Split(c.MustGet("UserRoles").(string), ",") {
+			roleIdInt, err := strconv.Atoi(roleId)
+			if err != nil {
+				logrus.Error(err)
+				utils.ResponseFailDefault(c)
+				c.Abort()
+				return
+			}
+			for _, menuId := range strings.Split(roles[roleIdInt]["menus"].(string), ",") {
+				if menuId == "0" {
+					continue
+				}
+				menuIdInt, err := strconv.Atoi(menuId)
+				if err != nil {
+					logrus.Error(err)
+					utils.ResponseFailDefault(c)
+					c.Abort()
+					return
+				}
+
+				if menus[menuIdInt]["sign"].(string) == perm {
+					c.Next()
+					return
+				}
+			}
+		}
+
+		utils.ResponseFail(c, http.StatusForbidden, "Forbidden!")
+		c.Abort()
 	}
 }

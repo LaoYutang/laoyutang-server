@@ -55,8 +55,9 @@ func Login(c *gin.Context) {
 	// 密码正确，生成token
 	// token数据结构体
 	claim := &structs.Claims{
-		UserName: user.UserName,
-		UserId:   user.Id,
+		UserName:  user.UserName,
+		UserId:    user.Id,
+		UserRoles: user.RoleIds,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(configs.TokenExpire).Unix(),
 			Issuer:    "laoyutang",
