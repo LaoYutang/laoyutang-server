@@ -27,6 +27,7 @@ func GetMenus() (res map[int]map[string]any, errOut error) {
 
 		for _, menu := range *menuStructs {
 			menus[menu.Id] = structs.H{
+				"id":   menu.Id,
 				"pid":  menu.Pid,
 				"name": menu.Name,
 				"type": menu.Type,

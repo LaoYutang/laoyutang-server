@@ -27,6 +27,7 @@ func GetRoles() (res map[int]map[string]any, errOut error) {
 
 		for _, role := range *roleStructs {
 			roles[role.Id] = structs.H{
+				"id":    role.Id,
 				"name":  role.Name,
 				"menus": role.Menus,
 			}
