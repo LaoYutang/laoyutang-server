@@ -15,7 +15,7 @@ import (
 
 func Read(c *gin.Context) {
 	roles := &[]structs.Role{}
-	if err := db.Sql.Order("created_at desc").Find(roles).Error; err != nil {
+	if err := db.Sql.Order("id desc").Find(roles).Error; err != nil {
 		logrus.Error(err)
 		utils.ResponseFailDefault(c)
 		return

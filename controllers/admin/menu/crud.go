@@ -15,7 +15,7 @@ import (
 
 func Read(c *gin.Context) {
 	menus := &[]structs.Menu{}
-	if err := db.Sql.Order("created_at desc").Find(menus).Error; err != nil {
+	if err := db.Sql.Order("id desc").Find(menus).Error; err != nil {
 		logrus.Error(err)
 		utils.ResponseFailDefault(c)
 		return
