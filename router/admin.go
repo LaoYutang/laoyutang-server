@@ -13,13 +13,13 @@ func initAdminRouter() {
 
 	userRouter := adminRouter.Group("/user")
 	{
-		userRouter.GET("", middlewares.FuncAuth("user:operation"), user.Read)
+		userRouter.GET("", middlewares.FuncAuth("user"), user.Read)
 		userRouter.POST("/get-menus", user.GetMenusAndPerms)
 	}
 
 	roleRouter := adminRouter.Group("/role")
 	{
-		roleRouter.GET("", middlewares.FuncAuth("role:operation"), role.Read)
+		roleRouter.GET("", middlewares.FuncAuth("role"), role.Read)
 		roleRouter.POST("", middlewares.FuncAuth("role:operation"), role.Create)
 		roleRouter.PUT("", middlewares.FuncAuth("role:operation"), role.Update)
 		roleRouter.DELETE("", middlewares.FuncAuth("role:operation"), role.Delete)
@@ -28,7 +28,7 @@ func initAdminRouter() {
 
 	menuRouter := adminRouter.Group("/menu")
 	{
-		menuRouter.GET("", middlewares.FuncAuth("menu:operation"), menu.Read)
+		menuRouter.GET("", middlewares.FuncAuth("menu"), menu.Read)
 		menuRouter.POST("", middlewares.FuncAuth("menu:operation"), menu.Create)
 		menuRouter.PUT("", middlewares.FuncAuth("menu:operation"), menu.Update)
 		menuRouter.DELETE("", middlewares.FuncAuth("menu:operation"), menu.Delete)
