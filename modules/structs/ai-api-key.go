@@ -10,3 +10,9 @@ type AiApiKey struct {
 func (AiApiKey) TableName() string {
 	return "t_ai_api_keys"
 }
+
+type AiApiKeyApi struct {
+	Model
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
